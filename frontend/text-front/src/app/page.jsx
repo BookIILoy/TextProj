@@ -6,15 +6,40 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [active, setActive] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(0);
   const options = ["url", "comment"];
   const [option, setOption] = useState("url");
 
   const handleSend = () => {
-    setLoading(!loading);
+    setResult(0);
+    setLoading(true);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      "input": input
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+     fetch("http://localhost:8000/api/pred/", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTimeout(() => {
+          setLoading(false);
+          setResult(result);
+        }, 500);
+      })
+      .catch((error) => console.error(error));
   }
 
   return (
-    <main className="flex min-h-screen justify-center items-center">
+    <main className="flex min-h-screen justify-center w-full items-center">
       <div className="flex flex-col">
         <h1 className="font-bold my-4">Toxic Comment Detector, Type : 
           <button className="text-white w-[7rem] bg-black border-4 
@@ -61,6 +86,11 @@ export default function Home() {
           </div>
         </div>
         )}
+        { result !== 0 && 
+        <div className="my-4">
+              <p className="font-bold text-xl w-[40rem]"> From : <span className="font-normal">{result.From}</span></p>
+              <p className="font-bold text-xl"> Result : <span className="font-normal">{result.Result}</span></p>
+          </div>}
       </div>
     </main>
   );
