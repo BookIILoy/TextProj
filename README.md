@@ -37,4 +37,4 @@ npm i
 ```
 
 ## Scraping website 
-Scraping file is in blackend/textback/models/ you can run it in that file don't forgot to run ToxicDetectModel.ipynb before run this part.
+Scraping file is in backend/textback/models/ you can run it in that file don't forgot to run ToxicDetectModel.ipynb before run this part.
