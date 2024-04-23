@@ -14,7 +14,8 @@
 ```
 cd model
 ```
-2. Run all ToxicDetectModel.ipynb for export model that use in backend
+!!! Important Don't forgot to run this part before run backend !!!
+2. Run All ToxicDetectModel.ipynb and Scraping.ipynb for export model that use in backend 
 
 ## How to run backend
 1. Move to backend folder
@@ -35,6 +36,7 @@ cd frontend/text-front
 ```
 npm i
 ```
-
-## Scraping website 
-Scraping file is in backend/textback/models/ you can run it in that file don't forgot to run ToxicDetectModel.ipynb before run this part.
+3. Run frontend Server
+```
+npm run dev
+```
