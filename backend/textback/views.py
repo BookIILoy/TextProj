@@ -35,7 +35,7 @@ def Scrap(input):
         final_tweets.append(data)
     tweets_cleaned = []
     Negative = 0
-    Neutral = 0
+    Nuetral = 0
     for i in range(len(final_tweets)):
         clean_tweets = clean(final_tweets[i])
         if clean_tweets != "":
@@ -43,10 +43,10 @@ def Scrap(input):
     for i in range(len(tweets_cleaned)):
         prediction = predict(tweets_cleaned[i])
         if prediction == "No hate and offensive speech":
-            Neutral += 1
+            Nuetral += 1
         else :
             Negative += 1
-    return Negative, Neutral
+    return Negative, Nuetral
 
 class PredictionViewSet(viewsets.ViewSet):
     def get_pred (self, request):
@@ -71,8 +71,8 @@ class PredictionViewSet(viewsets.ViewSet):
             response_data = {
                 "success": 1,
                 "From" : input,
-                "Negative Score" : result[0],
-                "Neutral Score" : result[1]
+                "Negative" : result[0],
+                "Nuetral" : result[1]
             }
             return Response(response_data, status=status.HTTP_200_OK)
         except Exception as e:

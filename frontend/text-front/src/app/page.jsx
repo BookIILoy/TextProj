@@ -10,24 +10,24 @@ export default function Home() {
   const options = ["url", "comment"];
   const [option, setOption] = useState("url");
 
-  const handleSend = () => {
+  const handleSend = async() => {
     setResult(0);
     setLoading(true);
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const raw = JSON.stringify({
-      "input": input
-    });
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow"
-    };
-
-     fetch("http://localhost:8000/api/pred/", requestOptions)
+    if(option == "comment") {
+      const raw = JSON.stringify({
+        "input": input
+      });
+  
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+      };
+       await fetch("http://localhost:8000/api/pred/", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setTimeout(() => {
@@ -36,6 +36,25 @@ export default function Home() {
         }, 500);
       })
       .catch((error) => console.error(error));
+    } else {
+      const raw = JSON.stringify({
+        "username": input
+      });
+  
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+      };
+      await fetch("http://localhost:8000/api/pred/user/", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setLoading(false);
+        setResult(result);
+      })
+      .catch((error) => console.error(error));
+    }
   }
 
   return (
@@ -86,11 +105,20 @@ export default function Home() {
           </div>
         </div>
         )}
-        { result !== 0 && 
-        <div className="my-4">
-              <p className="font-bold text-xl w-[40rem]"> From : <span className="font-normal">{result.From}</span></p>
-              <p className="font-bold text-xl"> Result : <span className="font-normal">{result.Result}</span></p>
-          </div>}
+        { option == "comment" ? 
+            ( result !== 0 && 
+                <div className="my-4">
+                  <p className="font-bold text-xl w-[40rem]"> From : <span className="font-normal">{result.From}</span></p>
+                  <p className="font-bold text-xl"> Result : <span className="font-normal">{result.Result}</span></p>
+                </div>
+            ) : ( result !== 0 &&
+              <div className="my-4">
+                <p className="font-bold text-xl"> From User : <span className="font-normal">{result.From}</span></p>
+                <p className="font-bold text-xl">Negative Score : <span className="font-normal">{result.Negative}</span></p>
+                <p className="font-bold text-xl">Nuetral Score : <span className="font-normal">{result.Nuetral}</span></p>
+              </div>
+            )
+        }
       </div>
     </main>
   );
