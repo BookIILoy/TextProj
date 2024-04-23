@@ -52,6 +52,7 @@ export default function Home() {
       .then((result) => {
         setLoading(false);
         setResult(result);
+        console.log(result);
       })
       .catch((error) => console.error(error));
     }
@@ -114,8 +115,10 @@ export default function Home() {
             ) : ( result !== 0 &&
               <div className="my-4">
                 <p className="font-bold text-xl"> From User : <span className="font-normal">{result.From}</span></p>
-                <p className="font-bold text-xl">Negative Score : <span className="font-normal">{result.Negative}</span></p>
-                <p className="font-bold text-xl">Nuetral Score : <span className="font-normal">{result.Nuetral}</span></p>
+                <p className="font-bold text-xl">No Hate and Offensive detected : <span className="font-normal">{result.no_hate_offen}</span></p>
+                <p className="font-bold text-xl">Offensive language detected : <span className="font-normal">{result.offensive}</span></p>
+                <p className="font-bold text-xl">Hate speech detected : <span className="font-normal">{result.hate}</span></p>
+                <img src = {`data:image/png;base64,${result.image_base64}`} alt="Visualization" />
               </div>
             )
         }
