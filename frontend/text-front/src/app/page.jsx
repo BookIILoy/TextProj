@@ -67,7 +67,7 @@ export default function Home() {
             {active && (
               <div>
                 {options.map((item) => (
-                  <p className="" key={item} onClick={(e) => {setOption(item); setActive(!active)}}>{item}</p>
+                  <p className="" key={item} onClick={(e) => {setOption(item); setActive(!active); setInput(""); setResult(0);}}>{item}</p>
                 ))}
               </div>
             )}
