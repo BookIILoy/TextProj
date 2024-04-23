@@ -114,11 +114,14 @@ export default function Home() {
                 </div>
             ) : ( result !== 0 &&
               <div className="my-4">
-                <p className="font-bold text-xl"> From User : <span className="font-normal">{result.From}</span></p>
-                <p className="font-bold text-xl">No Hate and Offensive detected : <span className="font-normal">{result.no_hate_offen}</span></p>
-                <p className="font-bold text-xl">Offensive language detected : <span className="font-normal">{result.offensive}</span></p>
-                <p className="font-bold text-xl">Hate speech detected : <span className="font-normal">{result.hate}</span></p>
-                <img src = {`data:image/png;base64,${result.image_base64}`} alt="Visualization" />
+                <p className="font-bold"> From User : <span className="font-normal">{result.From}</span></p>
+                <p className="font-bold ">No Hate and Offensive detected : <span className="font-normal">{result.no_hate_offen}</span></p>
+                <p className="font-bold ">Offensive language detected : <span className="font-normal">{result.offensive}</span></p>
+                <p className="font-bold">Hate speech detected : <span className="font-normal">{result.hate}</span></p>
+                <div className="flex flex-col justify-center">
+                  <img src = {`data:image/png;base64,${result.image_base64}`} alt="Visualization" className="border-4 border-solid border-black rounded-md my-2" />
+                  <p className="text-xs">Count = Tweets, 0 = no hate and offensive, 1 = offensive, 2 = hate speech</p>
+                </div>
               </div>
             )
         }
