@@ -16,17 +16,20 @@ csv_path = "result.csv"
 vectorizer_path = "vectorizer.pkl"
 clean_path = "clean_function.pkl"
 visualization_path = "visualization.pkl"
+wordcloud_path = "wordcloud.pkl"
 
 model_join = os.path.join(base_dir, models_folder, model_path)
 vectorizer_join = os.path.join(base_dir, models_folder, vectorizer_path)
 clean_join = os.path.join(base_dir, models_folder, clean_path)
 result_csv = os.path.join (base_dir, models_folder, csv_path)
 visualization_join = os.path.join(base_dir, models_folder, visualization_path)
+wordcloud_join = os.path.join(base_dir, models_folder, wordcloud_path)
 
 model = pickle.load(open(model_join, "rb"))
 cv = pickle.load(open(vectorizer_join, "rb"))
 clean = dill.load(open(clean_join, "rb"))
 visualization = dill.load(open(visualization_join, "rb"))
+wordcloud = dill.load(open(wordcloud_join, "rb"))
 
 def predict(input):
     input = cv.transform([input]).toarray()
@@ -93,13 +96,15 @@ class PredictionViewSet(viewsets.ViewSet):
             input = request.data.get('username')
             result = Scrap(input)
             image_base64 = visualization()
+            wordcloud_image = wordcloud()
             response_data = {
                 "success": 1,
                 "From" : input,
                 "no_hate_offen" : result[0],
                 "offensive" : result[1],
                 "hate" : result[2],
-                "image_base64": image_base64
+                "image_base64": image_base64,
+                "wordcloud": wordcloud_image
             }
             return Response(response_data, status=status.HTTP_200_OK)
         except Exception as e:

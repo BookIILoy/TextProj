@@ -121,6 +121,8 @@ export default function Home() {
                 <div className="flex flex-col justify-center">
                   <img src = {`data:image/png;base64,${result.image_base64}`} alt="Visualization" className="border-4 border-solid border-black rounded-md my-2" />
                   <p className="text-xs">Count = Tweets, 0 = no hate and offensive, 1 = offensive, 2 = hate speech</p>
+                  <img src = {`data:image/png;base64,${result.wordcloud}`} alt="Wordcloud" className=" w-auto h-[32rem] border-4 border-solid border-gray-600 rounded-md my-2" />
+                  <p className="text-xs">Wordcloud Visualized</p>
                 </div>
               </div>
             )
