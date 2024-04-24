@@ -17,6 +17,7 @@ vectorizer_path = "vectorizer.pkl"
 clean_path = "clean_function.pkl"
 visualization_path = "visualization.pkl"
 wordcloud_path = "wordcloud.pkl"
+mostword_path = "mostword.pkl"
 
 model_join = os.path.join(base_dir, models_folder, model_path)
 vectorizer_join = os.path.join(base_dir, models_folder, vectorizer_path)
@@ -24,12 +25,14 @@ clean_join = os.path.join(base_dir, models_folder, clean_path)
 result_csv = os.path.join (base_dir, models_folder, csv_path)
 visualization_join = os.path.join(base_dir, models_folder, visualization_path)
 wordcloud_join = os.path.join(base_dir, models_folder, wordcloud_path)
+mostword_join = os.path.join(base_dir, models_folder, mostword_path)
 
 model = pickle.load(open(model_join, "rb"))
 cv = pickle.load(open(vectorizer_join, "rb"))
 clean = dill.load(open(clean_join, "rb"))
 visualization = dill.load(open(visualization_join, "rb"))
 wordcloud = dill.load(open(wordcloud_join, "rb"))
+mostword = dill.load(open(mostword_join, "rb"))
 
 def predict(input):
     input = cv.transform([input]).toarray()
@@ -37,7 +40,7 @@ def predict(input):
     return predict
 
 def Scrap(input):
-    tweets = Scraper.get_tweets(input, mode='user', number=1000)
+    tweets = Scraper.get_tweets(input, mode='user', number=500)
 
     final_tweets = []
 
@@ -97,6 +100,7 @@ class PredictionViewSet(viewsets.ViewSet):
             result = Scrap(input)
             image_base64 = visualization()
             wordcloud_image = wordcloud()
+            mostword_visual = mostword()
             response_data = {
                 "success": 1,
                 "From" : input,
@@ -104,7 +108,8 @@ class PredictionViewSet(viewsets.ViewSet):
                 "offensive" : result[1],
                 "hate" : result[2],
                 "image_base64": image_base64,
-                "wordcloud": wordcloud_image
+                "wordcloud": wordcloud_image,
+                "mostword": mostword_visual
             }
             return Response(response_data, status=status.HTTP_200_OK)
         except Exception as e:

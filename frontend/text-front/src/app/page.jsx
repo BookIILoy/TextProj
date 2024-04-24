@@ -7,10 +7,14 @@ export default function Home() {
   const [active, setActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(0);
-  const options = ["url", "comment"];
-  const [option, setOption] = useState("url");
+  const [fail, setFail] = useState(false);
+  const options = ["username", "comment"];
+  const [option, setOption] = useState("username");
 
   const handleSend = async() => {
+    if(fail){
+      setFail(false);
+    }
     setResult(0);
     setLoading(true);
     const myHeaders = new Headers();
@@ -52,6 +56,9 @@ export default function Home() {
       .then((result) => {
         setLoading(false);
         setResult(result);
+        if(result.success == 0){
+          setFail(true);
+        }
         console.log(result);
       })
       .catch((error) => console.error(error));
@@ -113,7 +120,12 @@ export default function Home() {
                   <p className="font-bold text-xl"> Result : <span className="font-normal">{result.Result}</span></p>
                 </div>
             ) : ( result !== 0 &&
-              <div className="my-4">
+              ( fail ? 
+                <div className="my-4">
+                  <p className="font-bold text-xl">Failed to fetching tweets please try again...</p>
+                </div>
+                :(
+                <div className="my-4">
                 <p className="font-bold"> From User : <span className="font-normal">{result.From}</span></p>
                 <p className="font-bold ">No Hate and Offensive detected : <span className="font-normal">{result.no_hate_offen}</span></p>
                 <p className="font-bold ">Offensive language detected : <span className="font-normal">{result.offensive}</span></p>
@@ -121,10 +133,13 @@ export default function Home() {
                 <div className="flex flex-col justify-center">
                   <img src = {`data:image/png;base64,${result.image_base64}`} alt="Visualization" className="border-4 border-solid border-black rounded-md my-2" />
                   <p className="text-xs">Count = Tweets, 0 = no hate and offensive, 1 = offensive, 2 = hate speech</p>
-                  <img src = {`data:image/png;base64,${result.wordcloud}`} alt="Wordcloud" className=" w-auto h-[32rem] border-4 border-solid border-gray-600 rounded-md my-2" />
+                  <img src = {`data:image/png;base64,${result.wordcloud}`} alt="Wordcloud" className=" w-auto h-[32rem] border-4 border-solid border-black rounded-md my-2" />
                   <p className="text-xs">Wordcloud Visualized</p>
+                  <img src = {`data:image/png;base64,${result.mostword}`} alt="MostWordVisual" className="border-4 border-solid border-black rounded-md my-2" />
+                  <p className="text-xs">Most use word in this user</p>
                 </div>
               </div>
+              ))
             )
         }
       </div>
