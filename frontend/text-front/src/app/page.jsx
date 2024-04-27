@@ -2,15 +2,24 @@
 import Image from "next/image";
 import { useState } from "react";
 
+function extractUsername(input) {
+  const regex = /(?:https?:\/\/)?(?:www\.)?(?:twitter\.com|t\.co|twitter\.com\/#!\/)?(?:\w+\/)?@?([A-Za-z0-9_]{1,15})\b/g;
+    const matches = input.match(regex);
+    if (matches) {
+        return matches.map(match => match.replace(/^.*\/(@)?/, '')); // Extract only the username
+    } else {
+        return [];
+    }
+}
+
 export default function Home() {
   const [input, setInput] = useState("");
   const [active, setActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(0);
   const [fail, setFail] = useState(false);
-  const options = ["username", "comment"];
-  const [option, setOption] = useState("username");
-
+  const options = ["url", "comment"];
+  const [option, setOption] = useState("url");
   const handleSend = async() => {
     if(fail){
       setFail(false);
@@ -41,8 +50,9 @@ export default function Home() {
       })
       .catch((error) => console.error(error));
     } else {
+      const username = extractUsername(input);
       const raw = JSON.stringify({
-        "username": input
+        "username": username[username.length-1]
       });
   
       const requestOptions = {
